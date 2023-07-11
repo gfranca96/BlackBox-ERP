@@ -4,6 +4,10 @@ import UserContext from "../../../contexts/UserContext";
 import TaskContext from "../../../contexts/TaskContext";
 import fotoPerfil from "../../../../public/img/foto_perfil.png";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 export default function Perfil() {
   const { dadosUser, buscaDadosUsuario, deleteUser } = useContext(UserContext);
@@ -22,8 +26,28 @@ export default function Perfil() {
 
 
   function handleDeleteUser() {
-    deleteUser()
-    navigate('/login')
+    MySwal.fire({
+      title: <strong>Apagar conta</strong>,
+      html: <p>Tem certeza que deseja apagar sua conta essa ação não podera ser desfeita</p>,
+      icon: 'warning',
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: <small>Apagar conta</small>,
+      cancelButtonText: <small>Cancelar</small>,
+    }).then((result) => {
+      
+      if (result.isConfirmed) {
+        deleteUser()
+        MySwal.fire({
+          title: <strong>Conta apagada</strong>,
+          html: <p>Sua conta foi apaga com sucesso, você será redirecionado para a <b>HOME</b></p>,
+          icon: 'success'
+        }).then(() => {
+          navigate('/login')
+        })
+      }
+
+    })
   }
 
   return (
