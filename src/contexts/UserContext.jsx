@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { Login, Logout, criarLogin } from "../services/AuthService";
+import { Login, Logout, criarLogin, DeleteUsers } from "../services/AuthService";
 import { listarDadosUsuario } from "../services/FirestoreService";
 import { set } from "react-hook-form";
 
@@ -51,6 +51,16 @@ export function UserContextProvider(props) {
         setCurrentUser({ userID: null, logado: false })
     }
 
+    async function deleteUser() {
+        try {
+            await DeleteUsers()
+            setCurrentUser({ userID: null, logado: true })
+        } catch (error) {
+            throw Error(error.message)
+        }
+        setCurrentUser({ userID: null, logado: false })
+    }
+
     const contexto = {
         userID: currentUser.userID,
         logado: currentUser.logado,
@@ -59,6 +69,7 @@ export function UserContextProvider(props) {
         handleLogout,
         criarLogin: cadastrarUsuario,
         buscaDadosUsuario,
+        deleteUser
     }
     return (
         <UserContext.Provider value={contexto}>

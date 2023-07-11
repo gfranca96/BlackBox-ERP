@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser } from "firebase/auth"
 import { app } from "./FirebaseConfig"
 
 const auth = getAuth(app)
@@ -33,4 +33,8 @@ export async function criarLogin(email, senha) {
 
 export async function Logout() {
     await signOut(auth)
+}
+
+export async function DeleteUsers() {
+    await deleteUser(auth.currentUser)
 }
